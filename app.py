@@ -43,7 +43,10 @@ def count():
     getCountQuery = "SELECT COUNT(*) FROM uv_data"
     cur.execute(getCountQuery)
     count =  cur.fetchone()[0]
-    print(count)
+    # print(count)
+    # cur.execute("SELECT * FROM uv_data")
+    # x = cur.fetchall()
+    # print(x)
     return str(count), 200
 
 @app.route('/',methods=["POST"])
@@ -56,6 +59,18 @@ def search():
     cur.execute(searchByUvIdQuery,(uvId,))
     uvData = cur.fetchone()
     print(uvData)
+    severity = uvData[0]['severity']
+    differnce = int(uvData[0]['upvotes']) - int(uvData[0]['downvotes'])
+    if differnce > 0 :
+        severity = 3
+    elif differnce <0:
+        severity = 1
+    else :
+        severity = 2
+    updateSeverityQuery = "UPDATE uv_data SET severity = %s WHERE uv_id = %s"
+    cur.execute(updateSeverityQuery,(severity,uvId))
+    conn.commit()
+    uvData[0]['severity'] = severity
     conn.close()
     return uvData[0],200
 
@@ -81,3 +96,25 @@ def add():
     print(x)
     conn.close()
     return uvID,200
+
+@app.route('/upvote',methods=['POST'])
+def upvote():
+    conn = connectDB()
+    cur = conn.cursor()
+    uvId = request.get_json()['uvId']
+    updateUpvoteQuery = "UPDATE uv_data SET upvotes= upvotes+1 WHERE uv_id = %s"
+    cur.execute(updateUpvoteQuery,(uvId,))
+    conn.commit()
+    conn.close()
+    return "success", 200
+
+@app.route('/downvote',methods=['POST'])
+def downvote():
+    conn = connectDB()
+    cur = conn.cursor()
+    uvId = request.get_json()['uvId']
+    updateDownvoteQuery = "UPDATE uv_data SET downvotes = downvotes+1 WHERE uv_id = %s"
+    cur.execute(updateDownvoteQuery,(uvId,))
+    conn.commit()
+    conn.close()
+    return "success", 200
