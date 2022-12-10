@@ -15,13 +15,13 @@ import datetime
 
 app = Flask(__name__)
 CORS(app)
-conn = psycopg2.connect(dbname = Database, user = User ,password = Password, host = Host)
-cur = conn.cursor()
-cur.execute("CREATE TABLE uv_data(uv_id VARCHAR(6) PRIMARY KEY,date DATE,accused VARCHAR(150), des_sm VARCHAR(200), des_lg VARCHAR(1000), severity INT DEFAULT 1, upvotes INT DEFAULT 0 , downvotes INT DEFAULT 0)")
-cur.execute("INSERT INTO uv_data VALUES('asdere','03-11-2022','ahshdjdns','desc small','desc_long','2','1','3')")
-cur.execute("SELECT * FROM uv_data")
-x = cur.fetchall()
-print(x)
+# conn = psycopg2.connect(dbname = Database, user = User ,password = Password, host = Host)
+# cur = conn.cursor()
+# cur.execute("CREATE TABLE uv_data(uv_id VARCHAR(6) PRIMARY KEY,date DATE,accused VARCHAR(150), des_sm VARCHAR(200), des_lg VARCHAR(1000), severity INT DEFAULT 1, upvotes INT DEFAULT 0 , downvotes INT DEFAULT 0)")
+# cur.execute("INSERT INTO uv_data VALUES('asdere','03-11-2022','ahshdjdns','desc small','desc_long','2','1','3')")
+# cur.execute("SELECT * FROM uv_data")
+# x = cur.fetchall()
+# print(x)
 def connectDB():
     conn = psycopg2.connect(dbname = Database, user = User ,password = Password, host = Host)
     if(conn):
