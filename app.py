@@ -1,8 +1,8 @@
-Host = "ec2-52-20-166-21.compute-1.amazonaws.com"
-Database = "d6re5m4gmvtalp"
-User = "ybeylittvmuyzj"
+Host = "biuwbczwo7b578wwfjsu-postgresql.services.clever-cloud.com"
+Database = "biuwbczwo7b578wwfjsu"
+User = "uxv0hxett3sicwdz1pue"
 Port= 5432
-Password = "75d7775c33b597e7a3269903dfbfc8f1a79018f6c252581d9ad3768991cffb1d"
+Password = "5FbcFUac59mo5FC5AR7N"
 
 from datetime import date
 from flask import Flask, jsonify, request
@@ -15,7 +15,13 @@ import datetime
 
 app = Flask(__name__)
 CORS(app)
-
+conn = psycopg2.connect(dbname = Database, user = User ,password = Password, host = Host)
+cur = conn.cursor()
+cur.execute("CREATE TABLE uv_data(uv_id VARCHAR(6) PRIMARY KEY,date DATE,accused VARCHAR(150), des_sm VARCHAR(200), des_lg VARCHAR(1000), severity INT DEFAULT 1, upvotes INT DEFAULT 0 , downvotes INT DEFAULT 0)")
+cur.execute("INSERT INTO uv_data VALUES('asdere','03-11-2022','ahshdjdns','desc small','desc_long','2','1','3')")
+cur.execute("SELECT * FROM uv_data")
+x = cur.fetchall()
+print(x)
 def connectDB():
     conn = psycopg2.connect(dbname = Database, user = User ,password = Password, host = Host)
     if(conn):
@@ -30,11 +36,7 @@ def generateID(cur):
     if(cur.fetchone() != None):
         id = generateID(cur)
     return id
-# cur.execute("CREATE TABLE uv_data(uv_id VARCHAR(6) PRIMARY KEY,date DATE,accused VARCHAR(150), des_sm VARCHAR(200), des_lg VARCHAR(1000), severity INT DEFAULT 1, upvotes INT DEFAULT 0 , downvotes INT DEFAULT 0)")
-#cur.execute("INSERT INTO uv_data VALUES('asdere','03-11-2022','ahshdjdns','desc small','desc_long','2','1','3')")
-# cur.execute("SELECT * FROM uv_data")
-# x = cur.fetchall()
-# print(x)
+    
 
 @app.route('/count',methods=["POST"])
 def count():
